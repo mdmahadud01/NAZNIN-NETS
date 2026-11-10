@@ -1,0 +1,65 @@
+LIQUID CLOUD — TEST REPORT
+Verification date: 2026-11-10
+
+EXECUTED IN THE BUILD/TEST ENVIRONMENT
+- Python source syntax checks: PASS
+- JavaScript syntax (node --check client.js): PASS
+- Web manifest JSON syntax: PASS
+- Railway TOML syntax: PASS
+- Pinned Python dependency installation: PASS
+- Playwright Chromium installation and real browser launch: PASS
+- Gunicorn, one worker / threaded WebSocket transport: PASS
+
+UNIT TEST OUTPUT
+test_bad_password (test_app.AppTests.test_bad_password) ... ok
+test_csrf_required (test_app.AppTests.test_csrf_required) ... ok
+test_health (test_app.AppTests.test_health) ... ok
+test_login_and_assets (test_app.AppTests.test_login_and_assets) ... ok
+test_logout_csrf (test_app.AppTests.test_logout_csrf) ... ok
+test_logout_revokes_token (test_app.AppTests.test_logout_revokes_token) ... ok
+test_navigation_allowlist (test_app.AppTests.test_navigation_allowlist) ... ok
+test_private_home (test_app.AppTests.test_private_home) ... ok
+test_private_networks_denied (test_app.AppTests.test_private_networks_denied) ... ok
+test_rate_limit (test_app.AppTests.test_rate_limit) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.043s
+
+OK
+
+REAL-BROWSER INTEGRATION CHECKS
+PASS: Real Chromium rendered all 8 application tiles after password login
+PASS: Application search filters and restores tiles
+PASS: Theme and stream preset controls
+PASS: 390px mobile layout has no horizontal overflow
+PASS: Server launched a separate Chromium and streamed 3+ decodable JPEGs over authenticated WebSocket
+PASS: Remote browser resized to 430x880 and emitted matching image dimensions
+PASS: Second concurrent remote browser connection was rejected
+PASS: Disallowed private navigation rejected without breaking stream
+PASS: Clear-profile action closed browser and removed persistent session directory
+PASS: No JavaScript runtime errors in desktop/mobile smoke tests
+
+LIVE THIRD-PARTY HOMEPAGE SMOKE TEST
+YouTube was opened using the actual workspace app tile. Server-side Chromium
+rendered https://www.youtube.com/ with page title YouTube. The client displayed
+a 1280x800 JPEG screen stream with connection status Connected and no action
+error toast. This verifies homepage navigation/rendering, NOT account login,
+video playback, audio or compatibility with every website.
+
+NOT VERIFIED / NOT IMPLEMENTED
+- Railway cloud deployment itself: not deployed by this build process.
+- Docker image build on a Docker engine: not executed here.
+- Third-party account login, QR/OTP, CAPTCHA and authenticated Reels: not tested.
+- Real-world load, security audit and PaaS memory/CPU sizing: not measured.
+- Audio streaming: NOT IMPLEMENTED; visual JPEG screen streaming only.
+- Bare Android Termux browser hosting: not supported.
+
+SECURITY BOUNDARY
+This is a single-owner prototype, not a hardened public shared browser. Read
+README.md before publishing. Default PaaS mode disables Chromium sandbox;
+use dedicated isolated hosting, a strong access password, HTTPS and network
+egress controls. All password holders access the same website profile.
+
+ARCHIVE CHECK
+All entries are files at ZIP root. No wrapper folder, no nested directory,
+no browser profile, real credentials, virtualenv or compiled caches included.
